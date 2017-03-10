@@ -1,0 +1,5 @@
+aws.tf
+*pem.txt
+terraform.tfstate*
+variables.tf
+ansible/*.retry

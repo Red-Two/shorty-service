@@ -1,0 +1,2 @@
+[shorty]
+ 52.54.72.19 ansible_ssh_user=ec2-user

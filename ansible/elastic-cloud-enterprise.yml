@@ -1,0 +1,44 @@
+---
+- hosts: all
+  gather_facts: no
+  become: true
+
+  tasks:
+
+  - name: enable sbt repo via yum
+    yum_repository:
+      name: bintray--sbt-rpm
+      description: "bintray--sbt-rpm"
+      baseurl: http://dl.bintray.com/sbt/rpm
+      enabled: yes
+      gpgcheck: no
+      # gpgkey:
+
+  - name: yum install java-1.8.0-openjdk.x86_64
+    yum:
+      name={{item}}
+      state=latest
+    with_items:
+     - java-1.8.0-openjdk.x86_64
+     - sbt
+     - git
+     - python34-virtualenv.noarch
+     - python34-pip.noarch
+
+
+  - name: set JDK 8
+    alternatives:
+      name: java
+      path: /usr/lib/jvm/jre-1.8.0-openjdk.x86_64/bin/java
+
+  - name: git clone github.com/Red-Two/play-shorty-service
+    git:
+      repo: git://github.com/Red-Two/play-shorty-service
+      dest: /app/shorty
+
+  - name: fix perms
+    file:
+      path: /app/shorty
+      owner: ec2-user
+      group: ec2-user
+      recurse: yes
